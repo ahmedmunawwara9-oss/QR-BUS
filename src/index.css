@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Cairo", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+@page {
+  size: A4 portrait;
+  margin: 6mm 4mm !important;
+}
+
+/* Custom Print styles */
+@media print {
+  /* Suppress browser margins, padding, and hide unnecessary layout containers */
+  html, body, #root, main, .print-container-parent {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 210mm !important;
+    height: auto !important;
+    min-height: initial !important;
+    background: white !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+
+  body {
+    background: white;
+    color: black;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-page-break {
+    page-break-before: always !important;
+    break-before: page !important;
+    margin-top: 0 !important;
+  }
+
+  .print-container {
+    width: 202mm !important; /* Exact fit for A4 inside margins */
+    margin: 0 auto !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+  
+  /* Printable Card Grid: 3 rows x 2 columns (6 cards per page) */
+  .printable-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 96mm) !important;
+    grid-template-rows: repeat(3, 86mm) !important;
+    gap: 6mm 10mm !important;
+    justify-content: center !important;
+    align-content: center !important;
+    width: 100% !important;
+    height: 280mm !important;
+    page-break-inside: avoid !important;
+  }
+  
+  .print-card-border {
+    border: 0.5px solid #94a3b8 !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    page-break-inside: avoid !important;
+    box-shadow: none !important;
+    background: linear-gradient(to right, #ffffff, #f1f5f9) !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    width: 96mm !important;
+    height: 86mm !important;
+  }
+
+  /* Scale up elements inside BusQRCode for a gorgeous print quality at larger dimensions */
+  .print-card-border .w-\[55\%\] {
+    padding: 24px 20px !important;
+  }
+  .print-card-border .w-\[45\%\] {
+    padding: 20px 14px !important;
+  }
+  .print-card-border img {
+    width: 135px !important;
+    height: 135px !important;
+  }
+  .print-card-border .text-xs {
+    font-size: 15px !important;
+    margin-top: 6px;
+    margin-bottom: 6px;
+  }
+  .print-card-border .text-\[9px\] {
+    font-size: 12px !important;
+  }
+  .print-card-border .text-\[8px\] {
+    font-size: 11px !important;
+  }
+  .print-card-border .w-18 {
+    width: 82px !important;
+  }
+  .print-card-border .h-10 {
+    height: 48px !important;
+  }
+  .print-card-border .w-16 {
+    width: 74px !important;
+  }
+  .print-card-border .h-8 {
+    height: 38px !important;
+  }
+}
+
+/* Global design for print-card-border so it's beautiful on screen too */
+.print-card-border {
+  background: linear-gradient(to right, #ffffff, #f1f5f9) !important;
+  border: 0.5px solid #94a3b8 !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+}
+
+/* Global design for printable-grid so it is 100% accurate on screens and print */
+.printable-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 96mm) !important;
+  grid-template-rows: repeat(3, 86mm) !important;
+  gap: 6mm 10mm !important;
+  justify-content: center !important;
+  align-content: center !important;
+  width: 100% !important;
+}
+
+/* Smooth custom transitions */
+.transition-all-custom {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+

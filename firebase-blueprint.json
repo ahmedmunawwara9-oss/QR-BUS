@@ -1,0 +1,174 @@
+{
+  "entities": {
+    "bus": {
+      "title": "Bus",
+      "description": "Represents a bus in the fleet",
+      "type": "object",
+      "properties": {
+        "operatorNumber": {
+          "type": "string",
+          "description": "Bus operation number"
+        },
+        "plateNumber": {
+          "type": "string",
+          "description": "Bus plate number"
+        },
+        "driverName": {
+          "type": "string",
+          "description": "Driver name"
+        },
+        "manufacturingYear": {
+          "type": "string",
+          "description": "Year of manufacturing"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        }
+      },
+      "required": ["operatorNumber", "plateNumber", "driverName", "manufacturingYear", "createdAt"]
+    },
+    "movement": {
+      "title": "Movement",
+      "description": "Represents a bus entry/exit gate transaction Logged by guards",
+      "type": "object",
+      "properties": {
+        "busId": {
+          "type": "string",
+          "description": "Reference bus ID"
+        },
+        "operatorNumber": {
+          "type": "string",
+          "description": "Bus operation number copy"
+        },
+        "plateNumber": {
+          "type": "string",
+          "description": "Bus plate number copy"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["IN", "OUT"],
+          "description": "Movement type: IN or OUT"
+        },
+        "period": {
+          "type": "string",
+          "enum": ["AM", "PM"],
+          "description": "Shift period: AM (صباحي) or PM (مسائي)"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of physical move"
+        },
+        "guardId": {
+          "type": "string",
+          "description": "Username of guard logging the entry"
+        },
+        "guardName": {
+          "type": "string",
+          "description": "Name of guard"
+        }
+      },
+      "required": ["busId", "operatorNumber", "plateNumber", "type", "period", "timestamp", "guardId", "guardName"]
+    },
+    "guard": {
+      "title": "Guard",
+      "description": "Guard account created by system administrator",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Guard display name"
+        },
+        "username": {
+          "type": "string",
+          "description": "Guard username for login"
+        },
+        "password": {
+          "type": "string",
+          "description": "Guard pin/password for login"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        }
+      },
+      "required": ["name", "username", "password", "createdAt"]
+    },
+    "monitor": {
+      "title": "Monitor",
+      "description": "System general monitor signed up via Google pending administrator approval",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Monitor email address"
+        },
+        "name": {
+          "type": "string",
+          "description": "Monitor name"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["PENDING", "APPROVED", "REJECTED"],
+          "description": "Approval status"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Registration audit timestamp"
+        }
+      },
+      "required": ["email", "name", "status", "createdAt"]
+    },
+    "appSettings": {
+      "title": "AppSettings",
+      "description": "Configuration settings for Durrat Al-Munawwarah Bus organization app",
+      "type": "object",
+      "properties": {
+        "companyName": {
+          "type": "string",
+          "description": "Official company name"
+        },
+        "appTitle": {
+          "type": "string",
+          "description": "Application display title"
+        },
+        "companyLogo": {
+          "type": "string",
+          "description": "SVG or base64 data URL logo"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last settings update timestamp"
+        }
+      },
+      "required": ["companyName", "appTitle", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/buses/{busId}": {
+      "schema": "bus",
+      "description": "All registered buses"
+    },
+    "/movements/{movementId}": {
+      "schema": "movement",
+      "description": "All gate records logged by guards"
+    },
+    "/guards/{username}": {
+      "schema": "guard",
+      "description": "Active guards credentials list managed by administrators"
+    },
+    "/monitors/{uid}": {
+      "schema": "monitor",
+      "description": "General monitors records and status approvals"
+    },
+    "/settings/{settingsId}": {
+      "schema": "appSettings",
+      "description": "Dynamic configuration of the system assets and titles"
+    }
+  }
+}

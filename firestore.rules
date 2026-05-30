@@ -1,0 +1,73 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isEmailVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    // Checking if user is the designated system director
+    function isDirector() {
+      return isSignedIn() && (
+        request.auth.token.email == 'ahmedmunawwara9@gmail.com' || 
+        request.auth.token.email == 'admin@dr-manawarra.com'
+      );
+    }
+
+    // Checking if user is an approved monitor
+    function isApprovedMonitor() {
+      return isSignedIn() && 
+        exists(/databases/$(database)/documents/monitors/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/monitors/$(request.auth.uid)).data.status == 'APPROVED';
+    }
+
+    // Deny access by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- 1. Buses ---
+    match /buses/{busId} {
+      // Publicly readable so both authenticated directors/monitors and local gateway guards can read buses
+      allow read: if true;
+      allow create, update, delete: if isDirector();
+    }
+
+    // --- 2. Movements (Gate Logs) ---
+    match /movements/{movementId} {
+      // Public read/create so local guards can submit logs and dashboards can display statistics
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if isDirector();
+    }
+
+    // --- 3. Guards Configuration ---
+    match /guards/{username} {
+      // Anyone can verify a single guard's credentials during login via single document lookup
+      allow get: if true;
+      // Only the Director can read (list) or write the guard accounts list
+      allow list, write: if isDirector();
+    }
+
+    // --- 4. Monitors Registry ---
+    match /monitors/{uid} {
+      // A monitor can view or create their own request.
+      // Only Director can modify/approve the requests.
+      allow get: if isSignedIn() && request.auth.uid == uid;
+      allow create: if isSignedIn() && request.auth.uid == uid;
+      allow list: if isDirector();
+      allow update, delete: if isDirector();
+    }
+
+    // --- 5. App Settings ---
+    match /settings/{settingsId} {
+      allow read: if true; // Publicly readable for loading logo and title
+      allow write: if isDirector(); // Only director can modify styling, logo or title
+    }
+  }
+}

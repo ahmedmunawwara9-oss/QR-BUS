@@ -1,0 +1,6 @@
+{
+  "name": "تنظيم حافلات درة المنورة",
+  "description": "بوابة رقمية حديثة لتنظيم حركة دخول وخروج الحافلات من باب الشركة الرئيسي في مكة المكرمة - العكيشية بمزامنة سحابية ونظام باركود QR ذكي وحسابات أمان متعددة الصلاحيات.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
